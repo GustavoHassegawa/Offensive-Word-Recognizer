@@ -1,1 +1,1 @@
-# Offensive-Word-Rocognizer
+# Offensive-Word-Recognizer
