@@ -14,7 +14,7 @@ BinaryTrieNode createNode() {
     return newNode;
 }
 
-void insertWord(BinaryTrieNode root, const char * word) {
+void insertWord(BinaryTrieNode root, const char *word) {
     BinaryTrieNode currentNode = root;
 
     for (int i = 0; word[i] != '\0'; i++) {
@@ -24,11 +24,11 @@ void insertWord(BinaryTrieNode root, const char * word) {
             int charBit = (ch >> bit) & 1;
 
             if (charBit == 0) {
-                if (currentNode ==  NULL)
+                if (currentNode->left_son==  NULL)
                     currentNode->left_son = createNode();
                 currentNode = currentNode->left_son;
             } else {
-                if (currentNode == NULL)
+                if (currentNode->right_son == NULL)
                     currentNode->right_son = createNode();
                 currentNode = currentNode->right_son;
             }
@@ -38,7 +38,7 @@ void insertWord(BinaryTrieNode root, const char * word) {
     currentNode->endOfWord = true;
 }
 
-bool searchWord(BinaryTrieNode root, const char * word) {
+bool searchWord(BinaryTrieNode root, const char *word) {
     BinaryTrieNode currentNode = root;
 
     for (int i = 0; word[i] != '\0'; i++) {
