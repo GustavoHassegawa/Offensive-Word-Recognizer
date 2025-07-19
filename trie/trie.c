@@ -7,6 +7,8 @@
 int functionAlphabet(char letter) {
     if (letter >= 'a' && letter <= 'z') 
         return letter - 'a';
+    else if (letter >= 'A' && letter <= 'Z')
+        return letter - 'A';
     else
         return -1;
 }
@@ -44,7 +46,7 @@ void insertWord(TrieNode root, const char* word) {
     currentNode->endOfWord = true;
 }
 
-bool searchWord(TrieNode root, const char* word) { 
+bool searchWord(TrieNode root, const char* word, int * level) { 
     TrieNode currentNode = root;
     char letter;
     int indexAlphabet;
@@ -58,7 +60,7 @@ bool searchWord(TrieNode root, const char* word) {
         }
         currentNode = currentNode->children[indexAlphabet];
     }
-
+    * level = currentNode->depth;
     return currentNode != NULL && currentNode->endOfWord;
 }
 
@@ -68,5 +70,14 @@ void freeTrie(TrieNode root) {
             freeTrie(root->children[i]);
         }
         free(root);
+    }
+}
+
+void updateDepth(TrieNode root, int level) {
+    if (root == NULL) return;
+
+    root->depth = level;
+    for (int i = 0; i < ALPHABET; i++) {
+        updateDepth(root->children[i], level + 1);
     }
 }

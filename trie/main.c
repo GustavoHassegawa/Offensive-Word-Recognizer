@@ -6,18 +6,18 @@
 
 
 void verificar_palavras(TrieNode raiz, const char *frase) {
-    int i = 0, j = 0;
+    int i = 0, j = 0, nivel;
     int len = strlen(frase);
     char palavra[128];  
 
     while (i <= len) {
-        if (!isspace(frase[i]) && frase[i] != '\0') {
+        if (functionAlphabet(frase[i]) >= 0 && frase[i] != '\0') {
             if (j < 127)
                 palavra[j++] = tolower(frase[i]);  
         } else if (j > 0) {
             palavra[j] = '\0';
-            if (searchWord(raiz, palavra)) {
-                printf("'%s' encontrada na trie\n", palavra);
+            if (searchWord(raiz, palavra, &nivel)) {
+                printf("'%s' encontrada na trie. Profundidade: %d\n", palavra, nivel);
             }
             j = 0;
         }
@@ -57,6 +57,7 @@ int main() {
             break;
         }
         insertWord(raiz, palavra);
+        updateDepth(raiz, 0);
         free(palavra);
     }
 

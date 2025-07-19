@@ -4,12 +4,22 @@
 #include <stdio.h>
 #include <ctype.h>
 
+int functionAlphabet(char letter) {
+    if (letter >= 'a' && letter <= 'z') 
+        return letter - 'a';
+    else if (letter >= 'A' && letter <= 'Z')
+        return letter - 'A';
+    else
+        return -1;
+}
+
 BinaryTrieNode createNode() {
     BinaryTrieNode newNode = malloc(sizeof(struct binarytrienode));
     
     newNode->endOfWord = false;
     newNode->left_son = NULL;
     newNode->right_son = NULL;
+    newNode->depth = 0;
 
     return newNode;
 }
@@ -38,7 +48,7 @@ void insertWord(BinaryTrieNode root, const char *word) {
     currentNode->endOfWord = true;
 }
 
-bool searchWord(BinaryTrieNode root, const char *word) {
+bool searchWord(BinaryTrieNode root, const char *word, int * level) {
     BinaryTrieNode currentNode = root;
 
     for (int i = 0; word[i] != '\0'; i++) {
@@ -58,7 +68,7 @@ bool searchWord(BinaryTrieNode root, const char *word) {
             }
         }
     }
-
+    * level = currentNode->depth;
     return currentNode->endOfWord;
 }
 
@@ -68,4 +78,13 @@ void freeTrie(BinaryTrieNode root) {
         freeTrie(root->right_son);
         free(root);
     }
+}
+
+void updateDepth(BinaryTrieNode root, int level) {
+    if (root == NULL) return;
+
+    root->depth = level;
+
+    updateDepth(root->left_son, level + 1);
+    updateDepth(root->right_son, level + 1);
 }
