@@ -21,4 +21,6 @@ void updateDepth(BinaryTrieNode root, int level);
 
 int functionAlphabet(char letter);
 
+int memoryUsed(BinaryTrieNode root);
+
 #endif

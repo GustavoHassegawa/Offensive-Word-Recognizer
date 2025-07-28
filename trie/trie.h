@@ -21,4 +21,6 @@ void freeTrie(TrieNode root);
 
 void updateDepth(TrieNode root, int level);
 
+int memoryUsed(TrieNode root);
+
 #endif

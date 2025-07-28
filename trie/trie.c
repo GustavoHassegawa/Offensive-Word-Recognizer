@@ -81,3 +81,16 @@ void updateDepth(TrieNode root, int level) {
         updateDepth(root->children[i], level + 1);
     }
 }
+
+int memoryUsed(TrieNode root) {
+    if (root == NULL)
+        return 0;
+
+    int total = sizeof(struct trienode);
+
+    for (int i = 0; i < ALPHABET; i++) {
+        total += memoryUsed(root->children[i]);
+    }
+
+    return total;
+}

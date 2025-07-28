@@ -88,3 +88,12 @@ void updateDepth(BinaryTrieNode root, int level) {
     updateDepth(root->left_son, level + 1);
     updateDepth(root->right_son, level + 1);
 }
+
+int memoryUsed(BinaryTrieNode root) {
+    if (root == NULL)
+        return 0;
+
+    return sizeof(struct binarytrienode)
+           + memoryUsed(root->left_son)
+           + memoryUsed(root->right_son);
+}

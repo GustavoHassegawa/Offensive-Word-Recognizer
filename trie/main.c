@@ -3,7 +3,7 @@
 #include "trie.h"
 #include <ctype.h>
 #include <string.h>
-
+#include <time.h>
 
 void verificar_palavras(TrieNode raiz, const char *frase) {
     int i = 0, j = 0, nivel;
@@ -16,8 +16,14 @@ void verificar_palavras(TrieNode raiz, const char *frase) {
                 palavra[j++] = tolower(frase[i]);  
         } else if (j > 0) {
             palavra[j] = '\0';
-            if (searchWord(raiz, palavra, &nivel)) {
-                printf("'%s' encontrada na trie. Profundidade: %d\n", palavra, nivel);
+
+            clock_t inicio = clock();
+            int encontrada = searchWord(raiz, palavra, &nivel);
+            clock_t fim = clock();
+            double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC * 1000;
+
+            if (encontrada) {
+                printf("'%s' encontrada na trie. Profundidade: %d. Tempo gasto %.8f ms\n", palavra, nivel, tempo);
             }
             j = 0;
         }
@@ -42,12 +48,15 @@ void read_string_getchar(char **str) {
 }
 
 int main() {
-    printf("\033[?1049h");
-    printf("\033[H\033[J");
+    //printf("\033[?1049h");
+    //printf("\033[H\033[J");
 
+    clock_t inicio, fim;
     TrieNode raiz = createNode();
+    double tempo_insercao;
     char * palavra;
     char * texto;
+    int bits_utilizados;
 
     printf("------INSIRA AS PALAVRAS NA LISTA NEGRA------\n");
     while(1) {
@@ -56,12 +65,18 @@ int main() {
             free(palavra);
             break;
         }
+        inicio = clock();
         insertWord(raiz, palavra);
+        fim = clock();
+
+        tempo_insercao = (double)(fim - inicio) / CLOCKS_PER_SEC * 1000;
+        printf("\nTempo de inserção da palavra '%s': %.8f ms\n\n", palavra, tempo_insercao);
+
         updateDepth(raiz, 0);
         free(palavra);
     }
 
-    printf("\033[H\033[J");
+    //printf("\033[H\033[J");
     printf("------INSIRA O TEXTO A SER VERIFICADO------\n");
     
     while(1) {
@@ -74,7 +89,12 @@ int main() {
         verificar_palavras(raiz, texto);
         free(texto);
     }
+
+    bits_utilizados = memoryUsed(raiz);
+    
+    printf("\n MEMORIA TOTAL UTILIZADA NA TRIE M-ARIA: %d bytes\n", bits_utilizados);
+
     freeTrie(raiz);
-    printf("\033[?1049l");
+    //printf("\033[?1049l");
     return 0;
 }
